@@ -1,4 +1,3 @@
-from django.shortcuts import render
 # Create your views here.
 import csv,os,json
 from rest_framework import status

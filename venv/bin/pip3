@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/shohmasud/Рабочий стол/Webservice/venv/bin/python" "$0" "$@"
+'''exec' "/home/shohmasud/Рабочий стол/Transaction_historyWebservice/venv/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
