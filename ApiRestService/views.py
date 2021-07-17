@@ -49,3 +49,37 @@ def algoritm(file):
         result_username_money = dictFrom_username_spentMoney_gems #создаём экземпляр и объявляем глобальным
         gems_copy = list_gems
 
+
+class SerializerfileName(APIView):
+    def post(self, request):#отправим название файла csv,считываем и добавляем данные в базу данных
+        serializer = serialiaersfileName(data=request.data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            json_serealizarData = json.dumps(serializer.data["name_file"]).replace('"', "") #получаем название файла
+            print(json_serealizarData)
+            try:
+                algoritm(json_serealizarData)  # отправляем в функцию название файла
+            except:
+                fileName.objects.get(name_file=json_serealizarData).delete()
+                return Response("status:Файл не существует")
+            for num in range(len(result_username_money)):#добавляем данные в базу данных
+                response.objects.create(username=result_username_money[num][0],spent_money=int(result_username_money[num][1][0]), gems=gems_copy[num]).save()
+            return Response("status:Ok")
+
+        try:#если файл вызывается повторно, после какких-то измений,то выполним следующий код
+            json_serealizarData = json.dumps(serializer.data["name_file"]).replace('"', "")#получаем название файла
+            algoritm(json_serealizarData)
+            for num in range(len(result_username_money)):
+                for response_object in response.objects.all():#добавляем данные в базу данных
+                    #данные которые есть в базе данных не добавляем
+                    if response_object.username.__str__() == result_username_money[num][0] and response_object.spent_money.__int__() == int(result_username_money[num][1][0]) and response_object.gems.__str__() == gems_copy[num]:
+                        pass
+
+                    if response_object.username.__str__() == result_username_money[num][0]:#данные которые изменены добавим в базу данных
+                        if response_object.spent_money.__int__() != int(result_username_money[num][1][0]) or response_object.gems.__str__() != gems_copy[num]:
+                            response.objects.get(pk=response_object.id.__int__()).delete()
+                            response.objects.create(username=result_username_money[num][0],spent_money=int(result_username_money[num][1][0]),gems=gems_copy[num]).save()
+            return Response("status:Ok")
+        except:
+            return Response("status:Error")
