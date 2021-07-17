@@ -83,3 +83,12 @@ class SerializerfileName(APIView):
             return Response("status:Ok")
         except:
             return Response("status:Error")
+
+
+class SerializerResponse(APIView):
+    def get(self,request):
+        all_object = response.objects.all()
+        serializers = sResponse(all_object,many=True)
+        return Response(serializers.data)
+
+
