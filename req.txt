@@ -1,0 +1,6 @@
+appdirs==1.4.3
+Django==3.0
+psycopg2==2.8.6
+djangorestframework==3.12.2
+packaging==16.8
+six==1.10.0

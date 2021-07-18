@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  dbrestapi:
+    image: postgres:12
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: restproject
+  shmyproject:
+    build:
+      context: ""
+      dockerfile: Dockerfile
+    command: bash -c "python Transaction_historyWebservice/manage.py migrate &&
+               python Transaction_historyWebservice/manage.py runserver 0.0.0.0:8000"
+    volumes:
+    - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - dbrestapi
+volumes:
+  pg_data:
+
+#    python /usr/src/Django_RestWeb-service manage.py migrate noinput &&
+
+
+#docker tag local-image: tagname новое-репо: tagname
+#docker push new-repo: имя тега
